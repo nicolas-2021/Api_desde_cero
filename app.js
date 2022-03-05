@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
 
 require('dotenv').config(); // Agregamos el requerimiento del modulo dotenv
 
@@ -24,6 +25,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+/*
+CONEXION A BASE DE DATOS, antes de que inicien las rutas
+*/
+
+mongoose.connect(process.env.CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true});
+
+const connection = mongoose.connection;
+
+connection.on('error', () => {
+  console.log('Error connection to database');
+});
+
+connection.once('open', () => {
+  console.log('Connected to database');
+});
+
 
 app.use('/', indexRouter);
 /* app.use('/auth', authRouter);             
