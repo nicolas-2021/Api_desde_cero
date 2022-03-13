@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 require('dotenv').config(); // Agregamos el requerimiento del modulo dotenv
 
 var indexRouter = require('./routes/index');
-/* var usersRouter = require('./routes/users.router');
-var productsRouter = require('.routes/products.router');
+var usersRouter = require('./routes/users.router');
+/*var productsRouter = require('.routes/products.router');
 var ordersRouter = require('./routes/orders.router');
 var authRouter = require('.routes/auth.router'); */
 //Agregamos las rutas que tenemos que crear en /routes
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 CONEXION A BASE DE DATOS, antes de que inicien las rutas
 */
 
-mongoose.connect(process.env.CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect(process.env.CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const connection = mongoose.connection;
 
@@ -44,9 +44,9 @@ connection.once('open', () => {
 
 
 app.use('/', indexRouter);
-/* app.use('/auth', authRouter);             
+// app.use('/auth', authRouter);             
 app.use('/api/users', usersRouter);       
-app.use('/api/products', productsRouter);
+/*app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter); */
 //Asignamos las rutas que usara la app
 
