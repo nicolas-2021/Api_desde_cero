@@ -9,9 +9,9 @@ require('dotenv').config(); // Agregamos el requerimiento del modulo dotenv
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users.router');
-/*var productsRouter = require('.routes/products.router');
+var productsRouter = require('./routes/products.router');
 var ordersRouter = require('./routes/orders.router');
-var authRouter = require('.routes/auth.router'); */
+//var authRouter = require('.routes/auth.router'); */
 //Agregamos las rutas que tenemos que crear en /routes
 
 var app = express();
@@ -45,9 +45,9 @@ connection.once('open', () => {
 
 app.use('/', indexRouter);
 // app.use('/auth', authRouter);             
-app.use('/api/users', usersRouter);       
-/*app.use('/api/products', productsRouter);
-app.use('/api/orders', ordersRouter); */
+app.use('/api/users', usersRouter);
+app.use('/api/products', productsRouter);       
+app.use('/api/orders', ordersRouter);
 //Asignamos las rutas que usara la app
 
 // catch 404 and forward to error handler, esto sucede si intentamos acceder a rutas que no existen en las app.use
