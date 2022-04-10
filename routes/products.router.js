@@ -5,7 +5,9 @@ const {jsonresponse} = require('../lib/jsonresponse');
 
 const Product= require('../model/products.model');
 
-router.get('/', async (req, res, next) => {
+const auth = require('../auth/auth.middleware');
+
+router.get('/', auth.checkAuth, async (req, res, next) => {
     let results ={};
 
     try{
