@@ -5,8 +5,9 @@ const {jsonresponse} = require('../lib/jsonresponse');
 
 const User= require('../model/users.model');
 
+const auth = require('../auth/auth.middleware');
 
-router.get('/', async function(req, res, next) {
+router.get('/', auth.checkAuth, async function(req, res, next) {
   let results= {};
 
   try{

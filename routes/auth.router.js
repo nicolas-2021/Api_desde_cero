@@ -7,6 +7,8 @@ const Token = require('../model/token.model');
 const {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
 
 const User= require('../model/users.model');
+
+
 //el post en users.router.js no deberia existir queda de referencia por eso el codigo es ~=.
 router.post('/signup', async (req, res, next) => {   
     const {username, password} = req.body;
@@ -68,5 +70,47 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.post('/logout', async (req, res, next) => {
+  const {refreshToken} = req.body;
 
+  if (!refreshToken)
+    next(createError(400, 'Falta el Token'));
+
+  try{
+      await Token.findOneAndRemove({token: refreshToken});
+
+      res.json(jsonresponse(200, {
+         message: 'Logout Succesfully'
+        }));
+  }catch(error){
+    next(createError(400, 'Falta el Token'));
+  }
+});
+//El logout este no funciona como en las sesiones, lo que elimina es la posibilidad de ejecutar el refresh-token cuando el token expire.
+
+router.post('/refresh-token', async (req, res, next) => {
+  const {refreshToken} = req.body;
+
+  if (!refreshToken)
+    next(createError(400, 'Falta el Token'));
+
+  try{
+      const tokenDoc = await Token.findOne({token: refreshToken});
+
+      if (!tokenDoc){
+        next(createError(400, 'No token found'));
+      }else{
+        const payload = jwt.verify(tokenDoc.token, REFRESH_TOKEN_SECRET);
+        const accessToken = jwt.sign({user: payload}, ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
+
+        res.json(jsonresponse(200, {
+          message: 'access token updated',
+      accessToken
+    }));
+      }
+  }catch(error){
+    next(createError(400, 'Not token found'));
+  } 
+
+});
 module.exports = router;
